@@ -13,8 +13,17 @@ contract LogTable{
     }
     mapping(uint256 => Log) public Logs;
 
+    address logRegisterOwner;
+
+    // コントラクトデプロイ時に，TPAのアドレスを登録
+    constructor(address _tpa){
+        logRegisterOwner = _tpa;
+    }
+
     //Logの値からkeyとしてIDを生成，Logsに追加した後IDをreturn
     function registerLog( bool _result, string memory _chal, string memory _k1, string memory _k2, string memory _myu, string memory _gamma, bytes32 _fitId) public returns(uint256){
+        //トランザクション送信者がTPAでないと動かない
+        require(logRegisterOwner == msg.sender, "You are not TPA");
         uint256 id = uint256(keccak256(abi.encodePacked(_result, _chal, _k1, _k2, _myu, _gamma, _fitId)));
         Logs[id].result = _result;
         Logs[id].chal = _chal;
