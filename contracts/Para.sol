@@ -6,16 +6,15 @@ contract Params{
     struct PubKey {
         string pubkey;
     }
-    
-    //　Para各値の定義
-    mapping(uint256 => PubKey) public PubKeys;
 
     struct Para {
         string pairing;
         string u;
         string g;
     }
-    
+
+    //　Para各値の定義
+    mapping(uint256 => PubKey) public PubKeys;
     Para para;
 
     address paraRegisterOwner;
@@ -34,7 +33,7 @@ contract Params{
         // etc...
     }
 
-    //公開鍵登録
+    // 公開鍵登録
     function RegisterPubKey(uint256 _userId, string memory _pubkey) public {
         require(paraRegisterOwner == msg.sender, "You are not a system manager");
         PubKeys[_userId].pubkey = _pubkey;
