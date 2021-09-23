@@ -7,24 +7,23 @@ contract FileIndexTable {
     mapping(address => bool) owner; // ユーザが所持しているか　
     bytes[] hashedFile;
     bool isRegistered;
-    mapping(uint => bool)[] logIds; // 検証前or検証済みのLogをstore　
+    uint[] logIds; // 検証前or検証済みのLogをstore　
   }
-
   mapping(uint256 => FileIndex) public FIT;
 
-  address fitRegisterOwner;
+  address sp;
 
   string a;
 
   // コントラクトデプロイ時に，SPのアドレスを登録
   constructor(address _spa) {
-    fitRegisterOwner = _spa;
+    sp = _spa;
   }
 
   //固有データの登録　=>　fitのIDを返す
   function registerOriginalData(bytes[] memory _fileData, address _userAddress) public returns(uint256){
     //トランザクション送信者がSPでないと動かない
-    require(fitRegisterOwner == msg.sender, "You are not SP");
+    require(sp == msg.sender, "You are not SP");
 
     // ハッシュファイルからfitIDを生成
     uint256 fitId = uint256(keccak256(_fileData[0]));
@@ -52,7 +51,7 @@ contract FileIndexTable {
   //重複データの登録
   function registerDedUpData(uint256 _fitId, address _userAddress) public {
     //トランザクション送信者がSPでないと動かない
-    require(fitRegisterOwner == msg.sender, "You are not SP");
+    require(sp == msg.sender, "You are not SP");
 
     //既に登録されているユーザがいなかったら固有データなのでだめ．
     require(
