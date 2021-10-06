@@ -1,1 +1,2 @@
 # truffle-test
+truffleを用いてスマートコントラクトをEthereumのプライベートネットにdeployする練習
